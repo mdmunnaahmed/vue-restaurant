@@ -53,6 +53,7 @@
       <button type="button" class="btn btn-primary" @click="signUp">
         Submit
       </button>
+      <router-link to="/login">Login Now</router-link>
     </form>
   </div>
 </template>
@@ -79,10 +80,21 @@ export default {
       });
       console.log(result);
       if (result.status == 201) {
-        localStorage.setItem('user-info', JSON.stringify(result.data))
+        localStorage.setItem("user-info", JSON.stringify(result.data));
         alert("yesss, your data has been added to our database");
+        this.$router.push({
+          name: "TheHome",
+        });
       }
     },
+  },
+  mounted() {
+    let userIn = localStorage.getItem("user-info");
+    if (userIn) {
+      this.$router.push({
+        name: "TheHome",
+      });
+    }
   },
 };
 </script>
