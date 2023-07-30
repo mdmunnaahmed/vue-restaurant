@@ -1,7 +1,7 @@
 <template>
   <h1 class="text-center">Welcome to our Restaurant</h1>
   <router-link to="/signup" v-if="!loggedIn">Sign Up Now</router-link>
-  <h2 v-else>You are logged In</h2>
+  <h2 v-else>You are logged In as {{ user }}</h2>
 </template>
 
 <script>
@@ -10,18 +10,18 @@ export default {
   data() {
     return {
       loggedIn: false,
+      user: "",
     };
   },
   mounted() {
     let userIn = localStorage.getItem("user-info");
     if (!userIn) {
-      this.loggedIn = false;
-
-      // this.$router.push({
-      //   name: "SignUp",
-      // });
+      this.$router.push({
+        name: "SignUp",
+      });
     } else {
       this.loggedIn = true;
+      this.user = JSON.parse(userIn).name;
     }
   },
 };

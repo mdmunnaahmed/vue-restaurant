@@ -5,7 +5,7 @@
       <label for="exampleInputEmail1" class="form-label">Email address</label>
       <input
         v-model="email"
-        type="email"
+        type="text"
         class="form-control"
         id="exampleInputEmail1"
         aria-describedby="emailHelp"
@@ -23,7 +23,8 @@
         id="exampleInputPassword1"
       />
     </div>
-    <button @click="login" class="btn btn-primary">Login</button>
+    <p class="text-danger" v-if="credentialFalse">Your username or password is wrong</p>
+    <button @click="login" type="button" class="btn btn-primary">Login</button>
   </form>
 </template>
 
@@ -35,16 +36,34 @@ export default {
     return {
       email: "",
       password: "",
+      credentialFalse: false,
     };
   },
   methods: {
     async login() {
-      let result = await axios.get(`http://localhost:3000/users?email=${this.email}&password=${this.password}`)
+      let result = await axios.get(
+        `http://localhost:3000/users?email=${this.email}&password=${this.password}`
+      );
 
-      if(result.status == 200 && result.data.length > 0) {
-        console.log(okay);
+      if (result.status == 200 && result.data.length > 0) {
+        console.log("okay");
+        localStorage.setItem("user-info", JSON.stringify(result.data[0]));
+        this.$router.push({
+          name: "TheHome",
+        });
+      } else {
+        console.log("jamela ace");
+        this.credentialFalse = true;
       }
     },
+  },
+  mounted() {
+    let userIn = localStorage.getItem("user-info");
+    if (userIn) {
+      this.$router.push({
+        name: "TheHome",
+      });
+    }
   },
 };
 </script>
